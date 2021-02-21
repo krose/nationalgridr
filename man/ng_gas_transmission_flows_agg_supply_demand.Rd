@@ -4,8 +4,28 @@
 \alias{ng_gas_transmission_flows_agg_supply_demand}
 \title{Nationalgrid gas download}
 \usage{
-ng_gas_transmission_flows_agg_supply_demand(date_from = NA, date_to = NA)
+ng_gas_transmission_flows_agg_supply_demand(
+  query_type = c("LastUpdate", "Last24Hours", "CustomDates"),
+  date_from = NA,
+  date_to = NA
+)
+}
+\arguments{
+\item{query_type}{The query to be used. Defaults to 'LastUpdate'}
+
+\item{date_from}{Date. In combination with query_type='CustomDates'.}
+
+\item{date_to}{Date. In combination with query_type='CustomDates'.}
 }
 \description{
 Nationalgrid gas download
+}
+\examples{
+
+library(nationalgridr)
+
+ng_gas_transmission_flows_all_demand_data_items(query_type = "LastUpdate")
+ng_gas_transmission_flows_all_demand_data_items(query_type = "Last24Hours")
+ng_gas_transmission_flows_all_demand_data_items(query_type = "CustomDates", date_from = Sys.Date()-1, date_to = Sys.Date())
+
 }

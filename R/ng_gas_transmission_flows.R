@@ -23,14 +23,38 @@ ng_gas_transmission_readr <- function(url){
 
 #' Nationalgrid gas download
 #'
+#' @param query_type The query to be used. Defaults to 'LastUpdate'
+#' @param date_from Date. In combination with query_type='CustomDates'.
+#' @param date_to Date. In combination with query_type='CustomDates'.
+#'
 #' @export
 #'
-ng_gas_transmission_flows_all_zones <- function(date_from = NA, date_to = NA){
+#' @examples
+#'
+#' library(nationalgridr)
+#'
+#' ng_gas_transmission_flows_all_zones(query_type = "LastUpdate")
+#' ng_gas_transmission_flows_all_zones(query_type = "Last24Hours")
+#' ng_gas_transmission_flows_all_zones(query_type = "CustomDates", date_from = Sys.Date()-1, date_to = Sys.Date())
+#'
+ng_gas_transmission_flows_all_zones <- function(query_type = c("LastUpdate", "Last24Hours", "CustomDates"), date_from = NA, date_to = NA){
 
-  if(!is.na(date_from)[1] & !is.na(date_to)[1]){
-    url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=562&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=564&SelectedLocationClassificationIds=572&SelectedLocationClassificationIds=570&SelectedLocationClassificationIds=539&SelectedLocationClassificationIds=559&SelectedLocationClassificationIds=549&SelectedLocationClassificationIds=575&SelectedLocationClassificationIds=579&SelectedLocationClassificationIds=582&SelectedLocationClassificationIds=560&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=576&SelectedLocationClassificationIds=578&SelectedLocationClassificationIds=573&SelectedLocationClassificationIds=544&SelectedLocationClassificationIds=571&SelectedLocationClassificationIds=568&SelectedLocationClassificationIds=589&SelectedLocationClassificationIds=541&SelectedLocationClassificationIds=540&SelectedLocationClassificationIds=577&SelectedLocationClassificationIds=542&SelectedLocationClassificationIds=561&SelectedLocationClassificationIds=543&UserDefinedDownloadRadioSelection=Zones", .na = "")
-  } else {
+  if(query_type[1] == "CustomDates"){
+
+    if(!is.na(date_from)[1] & !is.na(date_to)[1]){
+      url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=562&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=564&SelectedLocationClassificationIds=572&SelectedLocationClassificationIds=570&SelectedLocationClassificationIds=539&SelectedLocationClassificationIds=559&SelectedLocationClassificationIds=549&SelectedLocationClassificationIds=575&SelectedLocationClassificationIds=579&SelectedLocationClassificationIds=582&SelectedLocationClassificationIds=560&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=576&SelectedLocationClassificationIds=578&SelectedLocationClassificationIds=573&SelectedLocationClassificationIds=544&SelectedLocationClassificationIds=571&SelectedLocationClassificationIds=568&SelectedLocationClassificationIds=589&SelectedLocationClassificationIds=541&SelectedLocationClassificationIds=540&SelectedLocationClassificationIds=577&SelectedLocationClassificationIds=542&SelectedLocationClassificationIds=561&SelectedLocationClassificationIds=543&UserDefinedDownloadRadioSelection=Zones", .na = "")
+
+    } else {
+      stop("When using query_type = 'CustomDates', the you must supply date_from and date_to params.")
+    }
+
+  } else if(query_type[1] == "Last24Hours"){
     url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=Last24Hours&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=562&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=564&SelectedLocationClassificationIds=572&SelectedLocationClassificationIds=570&SelectedLocationClassificationIds=539&SelectedLocationClassificationIds=559&SelectedLocationClassificationIds=549&SelectedLocationClassificationIds=575&SelectedLocationClassificationIds=579&SelectedLocationClassificationIds=582&SelectedLocationClassificationIds=560&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=576&SelectedLocationClassificationIds=578&SelectedLocationClassificationIds=573&SelectedLocationClassificationIds=544&SelectedLocationClassificationIds=571&SelectedLocationClassificationIds=568&SelectedLocationClassificationIds=589&SelectedLocationClassificationIds=541&SelectedLocationClassificationIds=540&SelectedLocationClassificationIds=577&SelectedLocationClassificationIds=542&SelectedLocationClassificationIds=561&SelectedLocationClassificationIds=543&UserDefinedDownloadRadioSelection=Zones"
+  } else if(query_type[1] == "LastUpdate") {
+    url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=LastUpdate&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=562&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=564&SelectedLocationClassificationIds=572&SelectedLocationClassificationIds=570&SelectedLocationClassificationIds=539&SelectedLocationClassificationIds=559&SelectedLocationClassificationIds=549&SelectedLocationClassificationIds=575&SelectedLocationClassificationIds=579&SelectedLocationClassificationIds=582&SelectedLocationClassificationIds=560&SelectedLocationClassificationIds=563&SelectedLocationClassificationIds=576&SelectedLocationClassificationIds=578&SelectedLocationClassificationIds=573&SelectedLocationClassificationIds=544&SelectedLocationClassificationIds=571&SelectedLocationClassificationIds=568&SelectedLocationClassificationIds=589&SelectedLocationClassificationIds=541&SelectedLocationClassificationIds=540&SelectedLocationClassificationIds=577&SelectedLocationClassificationIds=542&SelectedLocationClassificationIds=561&SelectedLocationClassificationIds=543&UserDefinedDownloadRadioSelection=Zones"
+
+  } else {
+    stop("You didn't give a valid query_type.")
   }
 
   df <- ng_gas_transmission_readr(url)
@@ -44,15 +68,38 @@ ng_gas_transmission_flows_all_zones <- function(date_from = NA, date_to = NA){
 
 #' Nationalgrid gas download
 #'
+#' @param query_type The query to be used. Defaults to 'LastUpdate'
+#' @param date_from Date. In combination with query_type='CustomDates'.
+#' @param date_to Date. In combination with query_type='CustomDates'.
+#'
 #' @export
 #'
-ng_gas_transmission_flows_all_terminals <- function(date_from = NA, date_to = NA){
+#' @examples
+#'
+#' library(nationalgridr)
+#'
+#' ng_gas_transmission_flows_all_terminals(query_type = "LastUpdate")
+#' ng_gas_transmission_flows_all_terminals(query_type = "Last24Hours")
+#' ng_gas_transmission_flows_all_terminals(query_type = "CustomDates", date_from = Sys.Date()-1, date_to = Sys.Date())
+#'
+ng_gas_transmission_flows_all_terminals <- function(query_type = c("LastUpdate", "Last24Hours", "CustomDates"), date_from = NA, date_to = NA){
 
+  if(query_type[1] == "CustomDates"){
 
-  if(!is.na(date_from)[1] & !is.na(date_to)[1]){
-    url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=546&SelectedLocationClassificationIds=580&SelectedLocationClassificationIds=551&SelectedLocationClassificationIds=581&SelectedLocationClassificationIds=552&SelectedLocationClassificationIds=553&SelectedLocationClassificationIds=557&SelectedLocationClassificationIds=569&SelectedLocationClassificationIds=554&SelectedLocationClassificationIds=555&SelectedLocationClassificationIds=556&UserDefinedDownloadRadioSelection=Terminals", .na = "")
-  } else {
+    if(!is.na(date_from)[1] & !is.na(date_to)[1]){
+      url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=546&SelectedLocationClassificationIds=580&SelectedLocationClassificationIds=551&SelectedLocationClassificationIds=581&SelectedLocationClassificationIds=552&SelectedLocationClassificationIds=553&SelectedLocationClassificationIds=557&SelectedLocationClassificationIds=569&SelectedLocationClassificationIds=554&SelectedLocationClassificationIds=555&SelectedLocationClassificationIds=556&UserDefinedDownloadRadioSelection=Terminals", .na = "")
+
+    } else {
+      stop("When using query_type = 'CustomDates', the you must supply date_from and date_to params.")
+    }
+
+  } else if(query_type[1] == "Last24Hours"){
     url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=Last24Hours&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=546&SelectedLocationClassificationIds=580&SelectedLocationClassificationIds=551&SelectedLocationClassificationIds=581&SelectedLocationClassificationIds=552&SelectedLocationClassificationIds=553&SelectedLocationClassificationIds=557&SelectedLocationClassificationIds=569&SelectedLocationClassificationIds=554&SelectedLocationClassificationIds=555&SelectedLocationClassificationIds=556&UserDefinedDownloadRadioSelection=Terminals"
+  } else if(query_type[1] == "LastUpdate") {
+    url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=LastUpdate&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=546&SelectedLocationClassificationIds=580&SelectedLocationClassificationIds=551&SelectedLocationClassificationIds=581&SelectedLocationClassificationIds=552&SelectedLocationClassificationIds=553&SelectedLocationClassificationIds=557&SelectedLocationClassificationIds=569&SelectedLocationClassificationIds=554&SelectedLocationClassificationIds=555&SelectedLocationClassificationIds=556&UserDefinedDownloadRadioSelection=Terminals"
+
+  } else {
+    stop("You didn't give a valid query_type.")
   }
 
   df <- ng_gas_transmission_readr(url)
@@ -67,14 +114,38 @@ ng_gas_transmission_flows_all_terminals <- function(date_from = NA, date_to = NA
 
 #' Nationalgrid gas download
 #'
+#' @param query_type The query to be used. Defaults to 'LastUpdate'
+#' @param date_from Date. In combination with query_type='CustomDates'.
+#' @param date_to Date. In combination with query_type='CustomDates'.
+#'
 #' @export
 #'
-ng_gas_transmission_flows_all_demand_data_items <- function(date_from = NA, date_to = NA){
+#' @examples
+#'
+#' library(nationalgridr)
+#'
+#' ng_gas_transmission_flows_all_demand_data_items(query_type = "LastUpdate")
+#' ng_gas_transmission_flows_all_demand_data_items(query_type = "Last24Hours")
+#' ng_gas_transmission_flows_all_demand_data_items(query_type = "CustomDates", date_from = Sys.Date()-1, date_to = Sys.Date())
+#'
+ng_gas_transmission_flows_all_demand_data_items <- function(query_type = c("LastUpdate", "Last24Hours", "CustomDates"), date_from = NA, date_to = NA){
 
-  if(!is.na(date_from)[1] & !is.na(date_to)[1]){
-    url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=585&SelectedLocationClassificationIds=586&SelectedLocationClassificationIds=583&SelectedLocationClassificationIds=584&SelectedLocationClassificationIds=587&UserDefinedDownloadRadioSelection=Demand", .na = "")
-  } else {
+  if(query_type[1] == "CustomDates"){
+
+    if(!is.na(date_from)[1] & !is.na(date_to)[1]){
+      url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=585&SelectedLocationClassificationIds=586&SelectedLocationClassificationIds=583&SelectedLocationClassificationIds=584&SelectedLocationClassificationIds=587&UserDefinedDownloadRadioSelection=Demand", .na = "")
+
+    } else {
+      stop("When using query_type = 'CustomDates', the you must supply date_from and date_to params.")
+    }
+
+  } else if(query_type[1] == "Last24Hours"){
     url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=Last24Hours&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=585&SelectedLocationClassificationIds=586&SelectedLocationClassificationIds=583&SelectedLocationClassificationIds=584&SelectedLocationClassificationIds=587&UserDefinedDownloadRadioSelection=Demand"
+  } else if(query_type[1] == "LastUpdate") {
+    url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=LastUpdate&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=585&SelectedLocationClassificationIds=586&SelectedLocationClassificationIds=583&SelectedLocationClassificationIds=584&SelectedLocationClassificationIds=587&UserDefinedDownloadRadioSelection=Demand"
+
+  } else {
+    stop("You didn't give a valid query_type.")
   }
 
   df <- ng_gas_transmission_readr(url)
@@ -88,15 +159,39 @@ ng_gas_transmission_flows_all_demand_data_items <- function(date_from = NA, date
 
 #' Nationalgrid gas download
 #'
+#' @param query_type The query to be used. Defaults to 'LastUpdate'
+#' @param date_from Date. In combination with query_type='CustomDates'.
+#' @param date_to Date. In combination with query_type='CustomDates'.
+#'
 #' @export
 #'
-ng_gas_transmission_flows_agg_supply_demand <- function(date_from = NA, date_to = NA){
+#' @examples
+#'
+#' library(nationalgridr)
+#'
+#' ng_gas_transmission_flows_all_demand_data_items(query_type = "LastUpdate")
+#' ng_gas_transmission_flows_all_demand_data_items(query_type = "Last24Hours")
+#' ng_gas_transmission_flows_all_demand_data_items(query_type = "CustomDates", date_from = Sys.Date()-1, date_to = Sys.Date())
+#'
+ng_gas_transmission_flows_agg_supply_demand <- function(query_type = c("LastUpdate", "Last24Hours", "CustomDates"), date_from = NA, date_to = NA){
 
 
-  if(!is.na(date_from)[1] & !is.na(date_to)[1]){
-    url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None", .na = "")
-  } else {
+  if(query_type[1] == "CustomDates"){
+
+    if(!is.na(date_from)[1] & !is.na(date_to)[1]){
+      url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None", .na = "")
+
+    } else {
+      stop("When using query_type = 'CustomDates', the you must supply date_from and date_to params.")
+    }
+
+  } else if(query_type[1] == "Last24Hours"){
     url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=Last24Hours&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None"
+  } else if(query_type[1] == "LastUpdate") {
+    url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=LastUpdate&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None"
+
+  } else {
+    stop("You didn't give a valid query_type.")
   }
 
   df <- ng_gas_transmission_readr(url)
