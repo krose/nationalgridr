@@ -96,7 +96,7 @@ ng_gas_transmission_flows_agg_supply_demand <- function(date_from = NA, date_to 
   if(!is.na(date_from)[1] & !is.na(date_to)[1]){
     url <- glue::glue("https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=CustomDates&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None", .na = "")
   } else {
-    url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate={date_from}&inclusiveEndDate={date_to}&UserDefinedDownloadTimeQueryType=Last24Hours&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None"
+    url <- "https://mip-prd-web.azurewebsites.net/UserDefinedFileDownload/DownloadFile?inclusiveStartDate=&inclusiveEndDate=&UserDefinedDownloadTimeQueryType=Last24Hours&inclusiveStartDate=&inclusiveEndDate=&LatestPublishedOriginallyPublished=LatestPublished&SelectedLocationClassificationIds=558&SelectedLocationClassificationIds=588&UserDefinedDownloadRadioSelection=None"
   }
 
   df <- ng_gas_transmission_readr(url)
