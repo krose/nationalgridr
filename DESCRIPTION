@@ -11,3 +11,6 @@ LazyData: true
 RoxygenNote: 7.1.1
 URL: https://github.com/krose/nationalgridr
 BugReports: https://github.com/krose/nationalgridr/issues
+Imports:
+    readr,
+    dplyr
