@@ -121,3 +121,26 @@ ng_add_md5 <- function(ng_df){
   ng_df
 }
 
+
+#' Average data to hourly
+#'
+#' @param ng_df data.frame with ng_gas_transmission flow data.
+#'
+#' @export
+#'
+#' @importFrom dplyr %>%
+#'
+ng_gas_transmission_hourly_avg <- function(ng_df){
+
+  ng_df <-
+    ng_df %>%
+    dplyr::mutate(timestamp = lubridate::floor_date(timestamp, unit = "hours")) %>%
+    dplyr::group_by(system_entry_name, download_selection, is_storage_site, timestamp) %>%
+    dplyr::summarise(value = mean(value)) %>%
+    dplyr::ungroup()
+
+  ng_df <- ng_add_md5(ng_df)
+
+  ng_df
+}
+
